@@ -23,12 +23,15 @@ public class Util {
      * 通知
      */
     public static void openNotifi(final Context ctx, final View.OnClickListener listener) {
-        AlertDialog alertDialog = new AlertDialog.Builder(ctx, android.R.style.Theme_DeviceDefault_Light_Dialog)//
+        AlertDialog alertDialog = new AlertDialog.Builder(ctx)//
                 .setCancelable(false)
+                .setIcon(ctx.getApplicationInfo().icon)
+                .setTitle(ctx.getApplicationInfo().name)
                 .setMessage(
                         "接收到了一条通知,\n" +
                                 "但由于通知被关闭\n" +
-                                "您将无法查看消息内容,请允许通知")
+                                "您将无法查看消息内容,\n" +
+                                "请允许通知")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -52,7 +55,6 @@ public class Util {
                     }
                 })
                 .create();
-//        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         alertDialog.show();
     }
 
