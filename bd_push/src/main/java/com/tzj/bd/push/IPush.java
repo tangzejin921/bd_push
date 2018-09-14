@@ -80,21 +80,16 @@ public interface IPush {
     void onListTags(Context context, int errorCode, List<String> tags, String requestId);
     /**
      * 接收透传消息的函数。
+     * 当设备接收到透传消息时，消息不会在通知栏展示，只是静默回调开发者自定义Receiver中的onMessage函数。
+     * 手机收到消息后不会有任何现象，
+     * 因为透传消息对用户完全透明，用户无法感知，便于开发者在不影响用户的情况下对app进行操作。
+     * 开发者可以通过log内容和自定义的回调函数onMessage中打印该内容，确认消息到达，并执行开发者指定操作。
      *
      * @param context             上下文
      * @param message             推送的消息
      * @param customContentString 自定义内容,为空或者json字符串
      */
     void onMessage(Context context, String message, String customContentString);
-    /**
-     * 接收通知点击的函数。
-     *
-     * @param context             上下文
-     * @param title               推送的通知的标题
-     * @param description         推送的通知的描述
-     * @param customContentString 自定义内容，为空或者json字符串
-     */
-    void onNotificationClicked(Context context, String title, String description, String customContentString) ;
     /**
      * 接收通知到达的函数。
      *
@@ -104,4 +99,13 @@ public interface IPush {
      * @param customContentString 自定义内容，为空或者json字符串
      */
     void onNotificationArrived(Context context, String title, String description, String customContentString);
+    /**
+     * 接收通知点击的函数。
+     *
+     * @param context             上下文
+     * @param title               推送的通知的标题
+     * @param description         推送的通知的描述
+     * @param customContentString 自定义内容，为空或者json字符串
+     */
+    void onNotificationClicked(Context context, String title, String description, String customContentString) ;
 }

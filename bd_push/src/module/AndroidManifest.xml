@@ -32,7 +32,7 @@
 
 
     <application
-        android:name=".BaiduPushApplication">
+        android:name="com.tzj.bd.push.BaiduPushApplication">
         <activity
             android:name="module.ModuleActivity">
             <intent-filter>
@@ -40,6 +40,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.tzj.bd.push.OpenNotifiActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <!-- push service start -->
         <!-- 用于接收系统消息以保证PushService正常运行 -->
         <receiver

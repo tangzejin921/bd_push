@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.tzj.bd.push.IPush;
+import com.tzj.bd.push.OpenNotifiActivity;
 import com.tzj.bd.push.PushReceiver;
 import com.tzj.bd.push.R;
 
@@ -45,7 +46,10 @@ public class ModuleActivity extends Activity implements View.OnClickListener{
 
         @Override
         public void onMessage(Context context, String message, String customContentString) {
-
+            result.append("---------------------");
+            StringBuffer sb = new StringBuffer("message:").append(message).append("\n")
+                    .append("customContentString:").append(customContentString).append("\n");
+            result.append(sb.toString());
         }
         @Override
         public void onNotificationClicked(Context context, String title, String description, String customContentString) {
@@ -67,6 +71,7 @@ public class ModuleActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_module);
         result = (TextView) findViewById(R.id.result);
         PushReceiver.addPushListener(getClass().getSimpleName(),push);
+        OpenNotifiActivity.start(this);
     }
 
     @Override

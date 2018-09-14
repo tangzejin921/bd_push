@@ -2,13 +2,15 @@ package com.tzj.bd.push;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.text.TextUtils;
+import android.util.LruCache;
 
 import com.baidu.android.pushservice.PushMessageReceiver;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.WeakHashMap;
 
 /*
  * Push消息处理receiver。请编写您需要的回调函数， 一般来说： onBind是必须的，用来处理startWork返回值；
@@ -32,7 +34,7 @@ import java.util.WeakHashMap;
  *
  */
 public class PushReceiver extends PushMessageReceiver {
-    private static WeakHashMap<String,IPush> weakReference = new WeakHashMap<>();
+    private static LruCache<String,IPush> weakReference = new LruCache<>(10);//注意：只里给了10
 
     public static void addPushListener(String tag,IPush push){
         if (tag!=null){
@@ -45,11 +47,11 @@ public class PushReceiver extends PushMessageReceiver {
         }
     }
     public static void clear(){
-        weakReference.clear();
+        weakReference.evictAll();
     }
     @Override
     public void onBind(Context context, int errCode, String appid, String userId, String channelId, String secretKey) {
-        Set<Map.Entry<String, IPush>> entries = weakReference.entrySet();
+        Set<Map.Entry<String, IPush>> entries = weakReference.snapshot().entrySet();
         for (Map.Entry<String, IPush> entry:entries) {
             entry.getValue().onBind(context,errCode,appid,userId,channelId,secretKey);
         }
@@ -57,7 +59,7 @@ public class PushReceiver extends PushMessageReceiver {
 
     @Override
     public void onUnbind(Context context, int i, String s) {
-        Set<Map.Entry<String, IPush>> entries = weakReference.entrySet();
+        Set<Map.Entry<String, IPush>> entries = weakReference.snapshot().entrySet();
         for (Map.Entry<String, IPush> entry:entries) {
             entry.getValue().onUnbind(context,i,s);
         }
@@ -65,7 +67,7 @@ public class PushReceiver extends PushMessageReceiver {
 
     @Override
     public void onSetTags(Context context, int i, List<String> list, List<String> list1, String s) {
-        Set<Map.Entry<String, IPush>> entries = weakReference.entrySet();
+        Set<Map.Entry<String, IPush>> entries = weakReference.snapshot().entrySet();
         for (Map.Entry<String, IPush> entry:entries) {
             entry.getValue().onSetTags(context,i,list,list1,s);
         }
@@ -73,7 +75,7 @@ public class PushReceiver extends PushMessageReceiver {
 
     @Override
     public void onDelTags(Context context, int i, List<String> list, List<String> list1, String s) {
-        Set<Map.Entry<String, IPush>> entries = weakReference.entrySet();
+        Set<Map.Entry<String, IPush>> entries = weakReference.snapshot().entrySet();
         for (Map.Entry<String, IPush> entry:entries) {
             entry.getValue().onDelTags(context,i,list,list1,s);
         }
@@ -81,7 +83,7 @@ public class PushReceiver extends PushMessageReceiver {
 
     @Override
     public void onListTags(Context context, int i, List<String> list, String s) {
-        Set<Map.Entry<String, IPush>> entries = weakReference.entrySet();
+        Set<Map.Entry<String, IPush>> entries = weakReference.snapshot().entrySet();
         for (Map.Entry<String, IPush> entry:entries) {
             entry.getValue().onListTags(context,i,list,s);
         }
@@ -89,25 +91,46 @@ public class PushReceiver extends PushMessageReceiver {
 
     @Override
     public void onMessage(Context context, String s, String s1) {
-        Set<Map.Entry<String, IPush>> entries = weakReference.entrySet();
+        Set<Map.Entry<String, IPush>> entries = weakReference.snapshot().entrySet();
         for (Map.Entry<String, IPush> entry:entries) {
             entry.getValue().onMessage(context,s,s1);
         }
     }
 
     @Override
-    public void onNotificationClicked(Context context, String s, String s1, String s2) {
-        Set<Map.Entry<String, IPush>> entries = weakReference.entrySet();
+    public void onNotificationArrived(Context context, String title, String description, String customContentString) {
+        OpenNotifiActivity.start(context);
+        Set<Map.Entry<String, IPush>> entries = weakReference.snapshot().entrySet();
         for (Map.Entry<String, IPush> entry:entries) {
-            entry.getValue().onNotificationClicked(context,s,s1,s2);
+            entry.getValue().onNotificationArrived(context,title,description,customContentString);
         }
     }
 
     @Override
-    public void onNotificationArrived(Context context, String s, String s1, String s2) {
-        Set<Map.Entry<String, IPush>> entries = weakReference.entrySet();
+    public void onNotificationClicked(Context context, String title, String description, String customContentString) {
+        try {
+            SharedPreferences sp = context.getSharedPreferences(PushReceiver.class.getName(), Context.MODE_PRIVATE);
+            SharedPreferences.Editor edit = sp.edit();
+            edit.putString("title",title);
+            edit.putString("description",description);
+            edit.putString("customContentString",customContentString);
+            edit.commit();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        Set<Map.Entry<String, IPush>> entries = weakReference.snapshot().entrySet();
         for (Map.Entry<String, IPush> entry:entries) {
-            entry.getValue().onNotificationArrived(context,s,s1,s2);
+            entry.getValue().onNotificationClicked(context,title,description,customContentString);
         }
     }
+
+    public static class PushMsg{
+        public String title;
+        public String description;
+        public String customContentString;
+        public boolean isEmpty(){
+            return TextUtils.isEmpty(title)&&TextUtils.isEmpty(description)&&TextUtils.isEmpty(customContentString);
+        }
+    }
+
 }
