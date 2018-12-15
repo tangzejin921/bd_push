@@ -3,13 +3,14 @@ package module;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.tzj.bd.push.IPush;
 import com.tzj.bd.push.OpenNotifiActivity;
 import com.tzj.bd.push.PushReceiver;
-import com.tzj.bd.push.R;
+import com.tzj.bd.push.demo.R;
 
 import java.util.List;
 
@@ -22,9 +23,11 @@ public class ModuleActivity extends Activity implements View.OnClickListener{
         @Override
         public void onBind(Context context, int errorCode, String appid, String userId, String channelId, String requestId) {
             StringBuffer sb = new StringBuffer("appid:").append(appid).append("\n")
+                    .append("errCode:").append(errorCode).append("\n")
                     .append("userId:").append(userId).append("\n")
                     .append("channelId:").append(channelId).append("\n")
                     .append("requestId:").append(requestId).append("\n");
+            Log.e("baidu_push",sb.toString());
             result.append(sb.toString());
         }
         @Override
@@ -49,6 +52,7 @@ public class ModuleActivity extends Activity implements View.OnClickListener{
             result.append("---------------------");
             StringBuffer sb = new StringBuffer("message:").append(message).append("\n")
                     .append("customContentString:").append(customContentString).append("\n");
+            Log.e("baidu_push",sb.toString());
             result.append(sb.toString());
         }
         @Override
@@ -61,6 +65,7 @@ public class ModuleActivity extends Activity implements View.OnClickListener{
             StringBuffer sb = new StringBuffer("title:").append(title).append("\n")
                     .append("description:").append(description).append("\n")
                     .append("customContentString:").append(customContentString).append("\n");
+            Log.e("baidu_push",sb.toString());
             result.append(sb.toString());
         }
     };

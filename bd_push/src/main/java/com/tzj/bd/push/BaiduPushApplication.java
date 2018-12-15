@@ -15,7 +15,7 @@ public class BaiduPushApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        init(this,"LjPgU2A3mBozEFmYaSbabEIo",null);
+        init(this,"gR2XeqrxcYuZf3b0RxIZzB4Y",null);
     }
 
     public static void init(Application application, String key, IPush push){
@@ -48,8 +48,8 @@ public class BaiduPushApplication extends Application{
         PushReceiver.PushMsg pushMsg = new PushReceiver.PushMsg();
         SharedPreferences sp = ctx.getSharedPreferences(PushReceiver.class.getName(), Context.MODE_PRIVATE);
         pushMsg.title = sp.getString("title", "");
-        pushMsg.title = sp.getString("description", "");
-        pushMsg.title = sp.getString("customContentString", "");
+        pushMsg.description = sp.getString("description", "");
+        pushMsg.customContentString = sp.getString("customContentString", "");
         SharedPreferences.Editor edit = sp.edit();
         edit.putString("title","");
         edit.putString("description","");

@@ -24,10 +24,10 @@
     <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
         tools:ignore="ProtectedPermissions" />
 
-    <!-- 适配Android N系统必需的ContentProvider写权限声明，写权限包含应用包名-->
-<!--    <uses-permission android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.com.tzj.bd.push" />
+    <!-- TODO 适配Android N系统必需的ContentProvider写权限声明，写权限包含应用包名-->
+<!--    <uses-permission android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.TODO (报名)" />
     <permission
-        android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.com.tzj.bd.push"
+        android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.TODO (报名)"
         android:protectionLevel="signature"/>-->
 
 
@@ -78,13 +78,13 @@
             android:name="com.baidu.android.pushservice.CommandService"
             android:exported="true" />
 
-        <!-- 适配Android N系统必需的ContentProvider声明，写权限包含应用包名-->
+        <!-- TODO 适配Android N系统必需的ContentProvider声明，写权限包含应用包名-->
 <!--        <provider
             android:name="com.baidu.android.pushservice.PushInfoProvider"
-            android:authorities="com.tzj.bd.push.bdpush"
+            android:authorities="TODO (报名).bdpush"
             android:exported="true"
             android:protectionLevel="signature"
-            android:writePermission="baidu.push.permission.WRITE_PUSHINFOPROVIDER.com.tzj.bd.push" />-->
+            android:writePermission="baidu.push.permission.WRITE_PUSHINFOPROVIDER.TODO (报名)" />-->
         <!-- push结束 -->
 
         <!-- 此处Receiver名字修改为当前包名路径 -->

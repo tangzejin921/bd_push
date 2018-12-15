@@ -11,7 +11,7 @@
         android:layout_margin="10dp"
         android:padding="5dp"
         android:layout_weight="1"
-        android:background="#333"
+        android:background="#ddd"
         android:scrollbars="vertical"
         android:hint="推送结果"/>
 

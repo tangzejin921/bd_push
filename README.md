@@ -77,7 +77,7 @@
         android:name="com.baidu.android.pushservice.PushInfoProvider"
         android:authorities="YourPackageName.bdpush"
         android:writePermission="baidu.push.permission.WRITE_PUSHINFOPROVIDER.YourPackageName"
-        android:protectionLevel = "si   gnature"
+        android:protectionLevel = "signature"
         android:exported="true" />
 ## 添加服务
     <!-- push service start -->
