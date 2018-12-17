@@ -1,14 +1,16 @@
 package com.tzj.bd.push;
 
 import android.app.Application;
-import android.app.Notification;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
-import com.baidu.android.pushservice.CustomPushNotificationBuilder;
+import com.baidu.android.pushservice.BasicPushNotificationBuilder;
 import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
+import com.baidu.android.pushservice.PushNotificationBuilder;
+import com.tzj.bd.push.demo.R;
 
 public class BaiduPushApplication extends Application{
 
@@ -19,22 +21,44 @@ public class BaiduPushApplication extends Application{
     }
 
     public static void init(Application application, String key, IPush push){
-        Resources resources = application.getApplicationContext().getResources();
         PushManager.startWork(application.getApplicationContext(), PushConstants.LOGIN_TYPE_API_KEY,key);
-        CustomPushNotificationBuilder builder = new CustomPushNotificationBuilder(
-                resources.getIdentifier("notification_custom_builder","layout",application.getApplicationInfo().packageName),
-                resources.getIdentifier("notification_icon","id",application.getApplicationInfo().packageName),
-                resources.getIdentifier("notification_title","id",application.getApplicationInfo().packageName),
-                resources.getIdentifier("notification_text","id",application.getApplicationInfo().packageName)
-        );
-        builder.setNotificationFlags(Notification.FLAG_AUTO_CANCEL);
-        builder.setNotificationDefaults(Notification.DEFAULT_SOUND|Notification.DEFAULT_VIBRATE);
-        builder.setStatusbarIcon(application.getApplicationInfo().icon);
-        PushManager.setNotificationBuilder(application,1,builder);
+        //自定义样式，效果不是很好
+//        Resources resources = application.getApplicationContext().getResources();
+//        PushNotificationBuilder builder = new CustomPushNotificationBuilder(
+//                resources.getIdentifier("notification_custom_builder","layout",application.getApplicationInfo().packageName),
+//                resources.getIdentifier("notification_icon","id",application.getApplicationInfo().packageName),
+//                resources.getIdentifier("notification_title","id",application.getApplicationInfo().packageName),
+//                resources.getIdentifier("notification_text","id",application.getApplicationInfo().packageName)
+//        );
+//
+//        builder.setChannelId(application.getPackageName());
+//        builder.setChannelName(getAppName(application));
+//        builder.setNotificationFlags(Notification.FLAG_AUTO_CANCEL);
+//        builder.setNotificationDefaults(Notification.DEFAULT_SOUND|Notification.DEFAULT_VIBRATE);
+//        builder.setStatusbarIcon(application.getApplicationInfo().icon);
+//        PushManager.setNotificationBuilder(application,1,builder);
+        //默认通知样式
+        PushNotificationBuilder builder = new BasicPushNotificationBuilder();
+        builder.setChannelId(application.getPackageName());
+        builder.setChannelName(getAppName(application));
         PushManager.setDefaultNotificationBuilder(application,builder);
         if (push!=null){
             PushReceiver.addPushListener(key,push);
         }
+    }
+    /**
+     * 获取应用程序名称
+     */
+    public static String getAppName(Context context) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            int labelRes = packageInfo.applicationInfo.labelRes;
+            return context.getResources().getString(labelRes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return context.getString(R.string.app_name);
     }
     public static void stopPush(Context ctx){
         PushManager.stopWork(ctx);

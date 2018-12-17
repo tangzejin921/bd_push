@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.tzj.bd.push">
-
+    <!--TODO 要在 gradle中要有 applicationId，因为这里用到了 ${applicationId}-->
 
     <!-- Push service 运行需要的权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -21,19 +21,23 @@
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
-    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+    <uses-permission
+        android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
         tools:ignore="ProtectedPermissions" />
 
-    <!-- TODO 适配Android N系统必需的ContentProvider写权限声明，写权限包含应用包名-->
-<!--    <uses-permission android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.TODO (报名)" />
+    <!-- 适配Android N系统必需的ContentProvider写权限声明，写权限包含应用包名-->
+    <uses-permission android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.${applicationId}" />
     <permission
-        android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.TODO (报名)"
-        android:protectionLevel="signature"/>-->
+        android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.${applicationId}"
+        android:protectionLevel="signature" />
 
 
-    <application>
-        <activity android:name="com.tzj.bd.push.OpenNotifiActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+    <application
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name">
+        <activity
+            android:name="com.tzj.bd.push.OpenNotifiActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- push service start -->
         <!-- 用于接收系统消息以保证PushService正常运行 -->
         <receiver
@@ -78,13 +82,13 @@
             android:name="com.baidu.android.pushservice.CommandService"
             android:exported="true" />
 
-        <!-- TODO 适配Android N系统必需的ContentProvider声明，写权限包含应用包名-->
-<!--        <provider
+        <!-- 适配Android N系统必需的ContentProvider声明，写权限包含应用包名-->
+        <provider
             android:name="com.baidu.android.pushservice.PushInfoProvider"
-            android:authorities="TODO (报名).bdpush"
+            android:authorities="${applicationId}.bdpush"
             android:exported="true"
             android:protectionLevel="signature"
-            android:writePermission="baidu.push.permission.WRITE_PUSHINFOPROVIDER.TODO (报名)" />-->
+            android:writePermission="baidu.push.permission.WRITE_PUSHINFOPROVIDER.${applicationId}" />
         <!-- push结束 -->
 
         <!-- 此处Receiver名字修改为当前包名路径 -->

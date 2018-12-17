@@ -21,27 +21,32 @@
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
-    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+    <uses-permission
+        android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
         tools:ignore="ProtectedPermissions" />
 
     <!-- 适配Android N系统必需的ContentProvider写权限声明，写权限包含应用包名-->
-    <uses-permission android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.com.tzj.bd.push.demo" />
+    <uses-permission android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.${applicationId}" />
     <permission
-        android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.com.tzj.bd.push.demo"
-        android:protectionLevel="signature"/>
+        android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.${applicationId}"
+        android:protectionLevel="signature" />
 
 
     <application
-        android:name="com.tzj.bd.push.BaiduPushApplication">
-        <activity
-            android:name="module.ModuleActivity">
+        android:name="com.tzj.bd.push.BaiduPushApplication"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name">
+        <activity android:name="module.ModuleActivity">
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.tzj.bd.push.OpenNotifiActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity
+            android:name="com.tzj.bd.push.OpenNotifiActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- push service start -->
         <!-- 用于接收系统消息以保证PushService正常运行 -->
         <receiver
@@ -89,10 +94,10 @@
         <!-- 适配Android N系统必需的ContentProvider声明，写权限包含应用包名-->
         <provider
             android:name="com.baidu.android.pushservice.PushInfoProvider"
-            android:authorities="com.tzj.bd.push.demo.bdpush"
+            android:authorities="${applicationId}.bdpush"
             android:exported="true"
             android:protectionLevel="signature"
-            android:writePermission="baidu.push.permission.WRITE_PUSHINFOPROVIDER.com.tzj.bd.push.demo" />
+            android:writePermission="baidu.push.permission.WRITE_PUSHINFOPROVIDER.${applicationId}" />
         <!-- push结束 -->
 
         <!-- 此处Receiver名字修改为当前包名路径 -->
@@ -110,3 +115,4 @@
     </application>
 
 </manifest>
+

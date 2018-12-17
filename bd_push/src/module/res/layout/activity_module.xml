@@ -13,6 +13,7 @@
         android:layout_weight="1"
         android:background="#ddd"
         android:scrollbars="vertical"
+        android:textColor="@android:color/primary_text_light"
         android:hint="推送结果"/>
 
 </LinearLayout>

@@ -166,4 +166,5 @@
         android:writePermission="baidu.push.permission.WRITE_PUSHINFOPROVIDER.com.jkwy.nj.skq" />
     <!--百度推送 END-->
 ## 遇到的坑
-    新安装的app，没有打开通知导致，不弹通知，其实是通知到的
+- 新安装的app，没有打开通知导致，不弹通知，其实是通知到的
+- 写demo时 application 的 icon没加然后就这么也收不到通知，查了一天多
