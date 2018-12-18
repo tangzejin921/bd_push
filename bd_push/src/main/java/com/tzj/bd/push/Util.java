@@ -38,7 +38,9 @@ public class Util {
                     public void onClick(DialogInterface dialog, int which) {
                         try {
                             Intent intent = new Intent();
-                            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+                            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+                            intent.putExtra(Settings.EXTRA_APP_PACKAGE,ctx.getPackageName());
+                            intent.putExtra(Settings.EXTRA_CHANNEL_ID,ctx.getApplicationInfo().uid);
                             intent.putExtra("app_package", ctx.getPackageName());
                             intent.putExtra("app_uid", ctx.getApplicationInfo().uid);
                             ctx.startActivity(intent);
