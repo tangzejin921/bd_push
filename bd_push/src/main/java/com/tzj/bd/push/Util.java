@@ -65,7 +65,6 @@ public class Util {
      * 打开应用的设置
      */
     public static void openSetting(Context ctx) {
-        //todo vivo 调用失败
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", ctx.getPackageName(), null);
         intent.setData(uri);

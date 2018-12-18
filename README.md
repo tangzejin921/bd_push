@@ -1,5 +1,76 @@
-# 百度
+# 百度推送
+flutter 端可以监听 推送消息
 
+## 为什么要做下面的 工程引入
+    因为工程结构被我改了，
+
+    原来是：
+    android
+    ios
+    lib
+    pubspec.yaml
+
+    被我改为了
+    android
+        src
+            main
+            flutter
+                pubspec.yaml
+
+    所以要做一些改动
+
+
+## 工程引入
+- pub 加入
+    ```pub
+    dev_dependencies:
+      bd_push:
+        git:
+          url: git://github.com/tzjandroid/bd_push.git
+          path: bd_push/src/flutter
+    ```
+- android 工程下的 settings.gradle 中改为如下
+    ```Gradle
+    def flutterProjectRoot = rootProject.projectDir.parentFile.toPath()
+
+    def plugins = new Properties()
+    def pluginsFile = new File(flutterProjectRoot.toFile(), '.flutter-plugins')
+    if (pluginsFile.exists()) {
+        pluginsFile.withReader('UTF-8') { reader -> plugins.load(reader) }
+    }
+
+    plugins.each { name, path ->
+        def pluginDirectory = flutterProjectRoot.resolve(path).resolve('android').toFile()
+        if(!pluginDirectory.exists()){
+            pluginDirectory = flutterProjectRoot.resolve(path).getParent().getParent().toFile()
+        }
+        if(pluginDirectory.exists()){
+            include ":$name"
+            project(":$name").projectDir = pluginDirectory
+        }
+    }
+    ```
+- android 工程下的 build.gradle  加入
+    ```Gradle
+    rootProject.extensions.add("bd_push",Type.isFlutterPlugin.name())
+    enum Type{
+        isAPP,
+        isModule,
+        isFlutterPlugin;
+    }
+    project.ext {
+        ext._compileSdkVersion = 27
+        ext._buildToolsVersion = '27.0.3'
+        ext._minSdkVersion = 16
+        ext._targetSdkVersion = 27
+        ext._supportVersion = "27.1.1"
+        ext.javaVersion = JavaVersion.VERSION_1_8
+    }
+    ```
+
+
+## example
+example 目录有个 demo
 
 
 ## 推送网址
@@ -149,22 +220,6 @@
      -libraryjars libs/pushservice-VERSION.jar
      -dontwarn com.baidu.**
      -keep class com.baidu.**{*; }
-## 说明：
-    在清单文件里加上
-    <!--百度推送-->
-    <uses-permission android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.com.jkwy.nj.skq" />
-    <permission
-        android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.com.jkwy.nj.skq"
-        android:protectionLevel="signature"></permission>
-    <!--百度推送 end-->
-    <!--百度推送-->
-    <provider
-        android:name="com.baidu.android.pushservice.PushInfoProvider"
-        android:authorities="com.jkwy.nj.skq.bdpush"
-        android:exported="true"
-        android:protectionLevel="signature"
-        android:writePermission="baidu.push.permission.WRITE_PUSHINFOPROVIDER.com.jkwy.nj.skq" />
-    <!--百度推送 END-->
 ## 遇到的坑
 - 新安装的app，没有打开通知导致，不弹通知，其实是通知到的
 - 写demo时 application 的 icon没加然后就这么也收不到通知，查了一天多
