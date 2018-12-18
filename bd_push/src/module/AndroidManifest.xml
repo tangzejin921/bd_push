@@ -33,7 +33,7 @@
 
 
     <application
-        android:name="com.tzj.bd.push.BaiduPushApplication"
+        android:name="com.tzj.bd.push.BdPushApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name">
         <activity android:name="module.ModuleActivity">

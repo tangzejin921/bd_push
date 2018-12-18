@@ -1,5 +1,6 @@
 package com.tzj.bd.push;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -62,9 +63,24 @@ public class Util {
      * 打开应用的设置
      */
     public static void openSetting(Context ctx) {
+        //todo vivo 调用失败
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", ctx.getPackageName(), null);
         intent.setData(uri);
         ctx.startActivity(intent);
+    }
+
+    /**
+     * 得到当前进程名
+     */
+    public static String getProcessName(Context context) {
+        int pid = android.os.Process.myPid();
+        ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo appProcess : mActivityManager.getRunningAppProcesses()) {
+            if (appProcess.pid == pid) {
+                return appProcess.processName;
+            }
+        }
+        return "";
     }
 }

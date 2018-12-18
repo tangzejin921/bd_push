@@ -34,66 +34,103 @@ import java.util.Set;
  *
  */
 public class PushReceiver extends PushMessageReceiver {
-    private static LruCache<String,IPush> weakReference = new LruCache<>(10);//注意：只里给了10
+    private static LruCache<String, IPush> weakReference = new LruCache<>(10);//注意：只里给了10
 
-    public static void addPushListener(String tag,IPush push){
-        if (tag!=null){
-            weakReference.put(tag,push);
+    public static void addPushListener(String tag, IPush push) {
+        if (tag != null) {
+            weakReference.put(tag, push);
         }
     }
-    public static void removeListener(String str){
-        if (str!=null){
+
+    public static void removeListener(String str) {
+        if (str != null) {
             weakReference.remove(str);
         }
     }
-    public static void clear(){
+
+    public static void clear() {
         weakReference.evictAll();
     }
+
     @Override
-    public void onBind(Context context, int errCode, String appid, String userId, String channelId, String secretKey) {
+    public void onBind(Context context, int errCode, String appId, String userId, String channelId, String requestId) {
+        try {
+            SharedPreferences sp = context.getSharedPreferences(PushReceiver.PushInfo.class.getName(), Context.MODE_PRIVATE);
+            SharedPreferences.Editor edit = sp.edit();
+            if (appId == null) {
+                appId = "";
+            }
+            edit.putString("appId", appId);
+            if (userId == null) {
+                userId = "";
+            }
+            edit.putString("userId", userId);
+            if (channelId == null) {
+                channelId = "";
+            }
+            edit.putString("channelId", channelId);
+            if (requestId == null) {
+                requestId = "";
+            }
+            edit.putString("requestId", requestId);
+            edit.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Set<Map.Entry<String, IPush>> entries = weakReference.snapshot().entrySet();
-        for (Map.Entry<String, IPush> entry:entries) {
-            entry.getValue().onBind(context,errCode,appid,userId,channelId,secretKey);
+        for (Map.Entry<String, IPush> entry : entries) {
+            entry.getValue().onBind(context, errCode, appId, userId, channelId, requestId);
         }
     }
 
     @Override
-    public void onUnbind(Context context, int i, String s) {
+    public void onUnbind(Context context, int errCode, String requestId) {
+        try {
+            SharedPreferences sp = context.getSharedPreferences(PushReceiver.PushInfo.class.getName(), Context.MODE_PRIVATE);
+            SharedPreferences.Editor edit = sp.edit();
+            edit.putString("appId", "");
+            edit.putString("userId", "");
+            edit.putString("channelId", "");
+            edit.putString("requestId", "");
+            edit.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Set<Map.Entry<String, IPush>> entries = weakReference.snapshot().entrySet();
-        for (Map.Entry<String, IPush> entry:entries) {
-            entry.getValue().onUnbind(context,i,s);
+        for (Map.Entry<String, IPush> entry : entries) {
+            entry.getValue().onUnbind(context, errCode, requestId);
         }
     }
 
     @Override
     public void onSetTags(Context context, int i, List<String> list, List<String> list1, String s) {
         Set<Map.Entry<String, IPush>> entries = weakReference.snapshot().entrySet();
-        for (Map.Entry<String, IPush> entry:entries) {
-            entry.getValue().onSetTags(context,i,list,list1,s);
+        for (Map.Entry<String, IPush> entry : entries) {
+            entry.getValue().onSetTags(context, i, list, list1, s);
         }
     }
 
     @Override
     public void onDelTags(Context context, int i, List<String> list, List<String> list1, String s) {
         Set<Map.Entry<String, IPush>> entries = weakReference.snapshot().entrySet();
-        for (Map.Entry<String, IPush> entry:entries) {
-            entry.getValue().onDelTags(context,i,list,list1,s);
+        for (Map.Entry<String, IPush> entry : entries) {
+            entry.getValue().onDelTags(context, i, list, list1, s);
         }
     }
 
     @Override
     public void onListTags(Context context, int i, List<String> list, String s) {
         Set<Map.Entry<String, IPush>> entries = weakReference.snapshot().entrySet();
-        for (Map.Entry<String, IPush> entry:entries) {
-            entry.getValue().onListTags(context,i,list,s);
+        for (Map.Entry<String, IPush> entry : entries) {
+            entry.getValue().onListTags(context, i, list, s);
         }
     }
 
     @Override
     public void onMessage(Context context, String s, String s1) {
         Set<Map.Entry<String, IPush>> entries = weakReference.snapshot().entrySet();
-        for (Map.Entry<String, IPush> entry:entries) {
-            entry.getValue().onMessage(context,s,s1);
+        for (Map.Entry<String, IPush> entry : entries) {
+            entry.getValue().onMessage(context, s, s1);
         }
     }
 
@@ -101,8 +138,8 @@ public class PushReceiver extends PushMessageReceiver {
     public void onNotificationArrived(Context context, String title, String description, String customContentString) {
         OpenNotifiActivity.start(context);
         Set<Map.Entry<String, IPush>> entries = weakReference.snapshot().entrySet();
-        for (Map.Entry<String, IPush> entry:entries) {
-            entry.getValue().onNotificationArrived(context,title,description,customContentString);
+        for (Map.Entry<String, IPush> entry : entries) {
+            entry.getValue().onNotificationArrived(context, title, description, customContentString);
         }
     }
 
@@ -111,25 +148,51 @@ public class PushReceiver extends PushMessageReceiver {
         try {
             SharedPreferences sp = context.getSharedPreferences(PushReceiver.class.getName(), Context.MODE_PRIVATE);
             SharedPreferences.Editor edit = sp.edit();
-            edit.putString("title",title);
-            edit.putString("description",description);
-            edit.putString("customContentString",customContentString);
+            if (title == null) {
+                title = "";
+            }
+            edit.putString("title", title);
+            if (description == null) {
+                description = "";
+            }
+            edit.putString("description", description);
+            if (customContentString == null) {
+                customContentString = "";
+            }
+            edit.putString("customContentString", customContentString);
             edit.commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         Set<Map.Entry<String, IPush>> entries = weakReference.snapshot().entrySet();
-        for (Map.Entry<String, IPush> entry:entries) {
-            entry.getValue().onNotificationClicked(context,title,description,customContentString);
+        for (Map.Entry<String, IPush> entry : entries) {
+            entry.getValue().onNotificationClicked(context, title, description, customContentString);
         }
     }
 
-    public static class PushMsg{
+    public static class PushInfo {
+        public String appId;
+        public String userId;
+        public String channelId;
+        public String requestId;
+
+        public boolean isEmpty() {
+            return TextUtils.isEmpty(appId)
+                    || TextUtils.isEmpty(userId)
+                    || TextUtils.isEmpty(channelId)
+                    || TextUtils.isEmpty(requestId);
+        }
+    }
+
+    public static class PushMsg {
         public String title;
         public String description;
         public String customContentString;
-        public boolean isEmpty(){
-            return TextUtils.isEmpty(title)&&TextUtils.isEmpty(description)&&TextUtils.isEmpty(customContentString);
+
+        public boolean isEmpty() {
+            return TextUtils.isEmpty(title)
+                    && TextUtils.isEmpty(description)
+                    && TextUtils.isEmpty(customContentString);
         }
     }
 
