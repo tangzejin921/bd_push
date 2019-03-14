@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">bd_push</string>
+    <string name="bd_push_key"></string>
 </resources>
