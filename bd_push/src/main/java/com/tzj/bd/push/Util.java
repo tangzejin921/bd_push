@@ -24,23 +24,23 @@ public class Util {
      * 通知
      */
     public static void openNotifi(final Context ctx, final View.OnClickListener listener) {
-        AlertDialog alertDialog = new AlertDialog.Builder(ctx)//
+        AlertDialog alertDialog = new AlertDialog.Builder(ctx, android.R.style.Theme_DeviceDefault_Light)//
                 .setCancelable(false)
                 .setIcon(ctx.getApplicationInfo().icon)
                 .setTitle(ctx.getApplicationInfo().name)
                 .setMessage(
-                        "接收到了一条通知,\n" +
-                                "但由于通知被关闭\n" +
-                                "您将无法查看消息内容,\n" +
-                                "请允许通知")
+                                "由于通知被关闭\n" +
+                                "您将无法接收消息通知\n" +
+                                "您可以如下设置\n" +
+                                "通知管理->允许通知->打开")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
                             Intent intent = new Intent();
                             intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
-                            intent.putExtra(Settings.EXTRA_APP_PACKAGE,ctx.getPackageName());
-                            intent.putExtra(Settings.EXTRA_CHANNEL_ID,ctx.getApplicationInfo().uid);
+                            intent.putExtra(Settings.EXTRA_APP_PACKAGE, ctx.getPackageName());
+                            intent.putExtra(Settings.EXTRA_CHANNEL_ID, ctx.getApplicationInfo().uid);
                             intent.putExtra("app_package", ctx.getPackageName());
                             intent.putExtra("app_uid", ctx.getApplicationInfo().uid);
                             ctx.startActivity(intent);
