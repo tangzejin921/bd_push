@@ -1,7 +1,6 @@
 package com.tzj.bd.push;
 
 import android.app.ActivityManager;
-import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.Settings;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 public class Util {
@@ -24,7 +24,7 @@ public class Util {
      * 通知
      */
     public static void openNotifi(final Context ctx, final View.OnClickListener listener) {
-        AlertDialog alertDialog = new AlertDialog.Builder(ctx, android.R.style.Theme_DeviceDefault_Light)//
+        AlertDialog alertDialog = new AlertDialog.Builder(ctx)//
                 .setCancelable(false)
                 .setIcon(ctx.getApplicationInfo().icon)
                 .setTitle(ctx.getApplicationInfo().name)

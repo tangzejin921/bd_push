@@ -37,7 +37,7 @@
         android:label="@string/app_name">
         <activity
             android:name="com.tzj.bd.push.OpenNotifiActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@style/NoBg" />
         <!-- push service start -->
         <!-- 用于接收系统消息以保证PushService正常运行 -->
         <receiver

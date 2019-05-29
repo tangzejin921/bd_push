@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="NoBg" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <!--window背景透明-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <!-- 状态栏颜色 -->
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <!--无背景 window透明-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--去掉过渡动画-->
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+</resources>
