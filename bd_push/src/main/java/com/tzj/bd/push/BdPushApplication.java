@@ -16,15 +16,16 @@ public class BdPushApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        init(this,"gR2XeqrxcYuZf3b0RxIZzB4Y",null);
+        init(this,null);
     }
 
-    public static void init(Application application, String key, IPush push){
+    public static void init(Application application, IPush push){
         //如果不是主进程不让其执行
         if (!Util.getProcessName(application).equals(application.getPackageName())){
             return;
         }
-        PushManager.startWork(application.getApplicationContext(), PushConstants.LOGIN_TYPE_API_KEY,key);
+        String key;
+        PushManager.startWork(application.getApplicationContext(), PushConstants.LOGIN_TYPE_API_KEY,key = application.getString(R.string.bd_key));
         //自定义样式，效果不是很好
 //        Resources resources = application.getApplicationContext().getResources();
 //        PushNotificationBuilder builder = new CustomPushNotificationBuilder(
